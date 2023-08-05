@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1098727428004",
+    "project_id": "wyrrdemo",
+    "storage_bucket": "wyrrdemo.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1098727428004:android:2b10b40d142648f9befb31",
+        "android_client_info": {
+          "package_name": "com.example.wyrrdemo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1098727428004-umdu6lpunr80i6kq5g9mqps0k0hh11om.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.wyrrdemo",
+            "certificate_hash": "0e0f2cd44c96830b59efe7f08798d474e181622e"
+          }
+        },
+        {
+          "client_id": "1098727428004-skfiu3dmpnop5ueicvq3g840p4f8h8g2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBq66XzsmaJZ8awPJHEjSv8UOy1jOxpCkg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1098727428004-skfiu3dmpnop5ueicvq3g840p4f8h8g2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
