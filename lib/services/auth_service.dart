@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:wyrrdemo/screens/home_page.dart';
 import 'package:wyrrdemo/screens/login_page.dart';
 
+import '../screens/splash_screen.dart';
+
 class AuthService {
   static handleAuth() {
     return StreamBuilder(
@@ -12,8 +14,9 @@ class AuthService {
               snapshot.connectionState == ConnectionState.waiting ||
               snapshot.hasError) {
             return SplashScreen();
+          } else {
+            return HomePage();
           }
-          return HomePage();
         });
   }
 

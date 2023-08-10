@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:wyrrdemo/screens/login_page.dart';
+import 'package:wyrrdemo/services/auth_service.dart';
 import 'package:wyrrdemo/utils/app_color.dart';
 
 void main() async {
@@ -30,7 +31,7 @@ class MyApp extends StatelessWidget {
           fontFamily: 'Good-Sans',
           appBarTheme: const AppBarTheme(
               elevation: 0, backgroundColor: Colors.transparent)),
-      home: LoginScreen(),
+      home: AuthService.handleAuth(),
     );
   }
 }

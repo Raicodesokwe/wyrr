@@ -1,6 +1,14 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:intl/intl.dart' show toBeginningOfSentenceCase;
+import 'package:shimmer/shimmer.dart';
+import 'package:wyrrdemo/screens/check_rates.dart';
+import 'package:wyrrdemo/screens/login_page.dart';
+import 'package:wyrrdemo/services/auth_service.dart';
 import 'package:wyrrdemo/widgets/background_neon.dart';
 
 import '../utils/app_color.dart';
@@ -15,6 +23,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   TabController? tabController;
   NumberFormat numberFormat = NumberFormat.decimalPattern();
+  User? user = FirebaseAuth.instance.currentUser;
+  Future<DocumentSnapshot<Map<String, dynamic>>>? _usernameFuture;
   @override
   void initState() {
     // TODO: implement initState
@@ -25,6 +35,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     tabController!.addListener(() {
       setState(() {});
     });
+
+    _usernameFuture =
+        FirebaseFirestore.instance.collection('users').doc(user!.uid).get();
   }
 
   @override
@@ -36,8 +49,75 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(
           children: [
+            Align(
+              alignment: Alignment.centerRight,
+              child: IconButton(
+                icon: Icon(
+                  FontAwesomeIcons.arrowRightFromBracket,
+                  color: AppColor.greenColor,
+                ),
+                onPressed: () {
+                  Navigator.pushReplacement(context,
+                      MaterialPageRoute(builder: (context) => LoginScreen()));
+                },
+              ),
+            ),
+            Row(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Hello',
+                      style: TextStyle(color: Colors.white60, fontSize: 18),
+                    ),
+                    FutureBuilder(
+                        future: _usernameFuture,
+                        builder: (context, AsyncSnapshot snapshot) {
+                          if (snapshot.hasError) {
+                            return Text(
+                              'Error',
+                              style: TextStyle(color: AppColor.whiteColor),
+                            );
+                          } else if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return Shimmer.fromColors(
+                              baseColor: AppColor.greenColor.withOpacity(0.5),
+                              highlightColor:
+                                  AppColor.greenColor.withOpacity(0.2),
+                              child: Container(
+                                height: 50,
+                                width: size.width * 0.4,
+                                decoration: BoxDecoration(
+                                    color: AppColor.greenColor.withOpacity(0.5),
+                                    borderRadius: BorderRadius.circular(10)),
+                              ),
+                            );
+                          }
+                          final userItem = snapshot.data;
+                          return Text(
+                            toBeginningOfSentenceCase(userItem['username'])!,
+                            style: TextStyle(
+                                color: AppColor.whiteColor,
+                                fontSize: 20,
+                                fontWeight: FontWeight.w600),
+                          );
+                        })
+                  ],
+                ),
+                Spacer(),
+                Container(
+                  height: 100,
+                  width: 100,
+                  decoration: BoxDecoration(
+                      color: AppColor.pinkColor,
+                      borderRadius: BorderRadius.circular(12)),
+                  child: SvgPicture.asset('assets/images/nut.svg'),
+                ),
+              ],
+            ),
             SizedBox(
-              height: 15,
+              height: size.height * 0.02,
             ),
             Container(
               height: size.height * 0.25,
@@ -98,37 +178,43 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                         SizedBox(
                           width: 20,
                         ),
-                        Container(
-                          height: 50,
-                          width: size.width * 0.3,
-                          child: Center(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Container(
-                                  height: 30,
-                                  width: 30,
-                                  child: Center(
-                                    child: Icon(
-                                      Icons.change_circle,
-                                      size: 15,
-                                      color: Colors.white,
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => CheckRates()));
+                          },
+                          child: Container(
+                            height: 50,
+                            width: size.width * 0.3,
+                            child: Center(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    height: 30,
+                                    width: 30,
+                                    child: Center(
+                                      child: Icon(
+                                        Icons.change_circle,
+                                        size: 15,
+                                        color: Colors.white,
+                                      ),
                                     ),
+                                    decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: AppColor.pinkColor),
                                   ),
-                                  decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: AppColor.pinkColor),
-                                ),
-                                SizedBox(
-                                  width: 2,
-                                ),
-                                Text('Change\ncurrency'),
-                              ],
+                                  SizedBox(
+                                    width: 2,
+                                  ),
+                                  Text('Change\ncurrency'),
+                                ],
+                              ),
                             ),
+                            decoration: BoxDecoration(
+                                color: AppColor.whiteColor,
+                                borderRadius: BorderRadius.circular(12)),
                           ),
-                          decoration: BoxDecoration(
-                              color: AppColor.whiteColor,
-                              borderRadius: BorderRadius.circular(12)),
                         ),
                       ],
                     )
@@ -188,7 +274,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       ),
                     ])),
             SizedBox(
-              height: size.height * 0.6,
+              height: size.height * 0.48,
               width: double.infinity,
               child: TabBarView(controller: tabController, children: [
                 Container(),
