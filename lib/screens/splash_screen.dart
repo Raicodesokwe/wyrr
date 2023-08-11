@@ -7,9 +7,16 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return BackgroundNeon(
         child: Center(
-      child: SvgPicture.asset('assets/images/logo.svg'),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(20),
+        child: SvgPicture.asset(
+          'assets/images/logo.svg',
+          width: size.width * 0.5,
+        ),
+      ),
     ));
   }
 }

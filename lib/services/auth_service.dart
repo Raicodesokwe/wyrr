@@ -10,8 +10,10 @@ class AuthService {
     return StreamBuilder(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (BuildContext context, snapshot) {
-          if (!snapshot.hasData ||
-              snapshot.connectionState == ConnectionState.waiting ||
+          if (!snapshot.hasData) {
+            print(snapshot.stackTrace);
+            return LoginScreen();
+          } else if (snapshot.connectionState == ConnectionState.waiting ||
               snapshot.hasError) {
             return SplashScreen();
           } else {

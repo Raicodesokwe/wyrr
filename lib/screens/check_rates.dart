@@ -77,7 +77,10 @@ class _CheckRatesState extends State<CheckRates> {
             if (!isKeyboard)
               Text(
                 'Currency\nConverter',
-                style: TextStyle(fontSize: 35),
+                style: TextStyle(
+                    fontSize: 35,
+                    fontWeight: FontWeight.w600,
+                    color: AppColor.whiteColor),
               ),
             SizedBox(
               height: size.height * 0.1,
@@ -107,7 +110,8 @@ class _CheckRatesState extends State<CheckRates> {
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                       hintText: 'Enter amount',
-                      hintStyle: TextStyle(fontFamily: 'Good-Sans'),
+                      hintStyle: TextStyle(
+                          fontFamily: 'Good-Sans', color: Colors.white60),
                       border: InputBorder.none),
                 )),
             SizedBox(
@@ -115,7 +119,10 @@ class _CheckRatesState extends State<CheckRates> {
             ),
             Row(
               children: [
-                Text('From:'),
+                Text(
+                  'From:',
+                  style: TextStyle(color: Colors.white),
+                ),
                 SizedBox(
                   width: 7,
                 ),
@@ -156,7 +163,10 @@ class _CheckRatesState extends State<CheckRates> {
                   backgroundColor: Colors.transparent,
                 ),
                 Spacer(),
-                Text('To:'),
+                Text(
+                  'To:',
+                  style: TextStyle(color: Colors.white),
+                ),
                 SizedBox(
                   width: 7,
                 ),
@@ -206,7 +216,7 @@ class _CheckRatesState extends State<CheckRates> {
                     children: [
                       Text(
                         'They\'ll receive . . .',
-                        style: TextStyle(fontSize: 18),
+                        style: TextStyle(fontSize: 18, color: Colors.white),
                       ),
                       Spacer(),
                       StreamBuilder(
@@ -249,7 +259,7 @@ class _CheckRatesState extends State<CheckRates> {
                 : Center(
                     child: Text(
                     'They\'ll receive . . .',
-                    style: TextStyle(fontSize: 18),
+                    style: TextStyle(fontSize: 18, color: Colors.white),
                   )),
             SizedBox(
               height: size.height * 0.07,
@@ -262,6 +272,7 @@ class _CheckRatesState extends State<CheckRates> {
                       child: Center(
                         child: Icon(
                           Icons.swap_horiz,
+                          color: Colors.white,
                           size: 55,
                         ),
                       ),

@@ -1,6 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+import 'package:wyrrdemo/provider/from_currency_provider.dart';
+import 'package:wyrrdemo/provider/to_currency_provider.dart';
 
 import 'package:wyrrdemo/screens/login_page.dart';
 import 'package:wyrrdemo/services/auth_service.dart';
@@ -22,16 +25,26 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-          scaffoldBackgroundColor: AppColor.blackColor,
-          fontFamily: 'Good-Sans',
-          appBarTheme: const AppBarTheme(
-              elevation: 0, backgroundColor: Colors.transparent)),
-      home: AuthService.handleAuth(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => ToCurrencyProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => FromCurrencyProvider(),
+        ),
+      ],
+      child: MaterialApp(
+        title: 'Flutter Demo',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+            visualDensity: VisualDensity.adaptivePlatformDensity,
+            scaffoldBackgroundColor: AppColor.blackColor,
+            fontFamily: 'Good-Sans',
+            appBarTheme: const AppBarTheme(
+                elevation: 0, backgroundColor: Colors.transparent)),
+        home: AuthService.handleAuth(),
+      ),
     );
   }
 }
