@@ -39,7 +39,7 @@ class _FromCurrencyOverlayState extends State<FromCurrencyOverlay>
     return ScaleTransition(
       scale: scaleAnimation,
       child: AlertDialog(
-          backgroundColor: AppColor.blackColor,
+          backgroundColor: AppColor.greenColor,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           title: Text(
@@ -82,7 +82,10 @@ class _FromCurrencyOverlayState extends State<FromCurrencyOverlay>
                         ),
                         Text(
                           frlist.name,
-                          style: TextStyle(color: Colors.white),
+                          style: TextStyle(
+                              color: Colors.black54,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 13),
                         )
                       ],
                     ),

@@ -96,6 +96,7 @@ class _CheckRatesState extends State<CheckRates> {
                     borderRadius: BorderRadius.circular(10.0)),
                 child: TextFormField(
                   controller: amountController,
+                  style: const TextStyle(color: Colors.white70),
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Please enter a valid amount';
@@ -106,11 +107,13 @@ class _CheckRatesState extends State<CheckRates> {
                   onChanged: (value) {
                     this.amount = value;
                   },
-                  cursorColor: Colors.black45,
+                  cursorColor: Colors.white60,
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                       hintText: 'Enter amount',
                       hintStyle: TextStyle(
+                          fontFamily: 'Good-Sans', color: Colors.white60),
+                      labelStyle: TextStyle(
                           fontFamily: 'Good-Sans', color: Colors.white60),
                       border: InputBorder.none),
                 )),
@@ -251,7 +254,8 @@ class _CheckRatesState extends State<CheckRates> {
                                                   : toCurrency == 'AUD'
                                                       ? 'AUD\$$changedAmount'
                                                       : changedAmount,
-                              style: TextStyle(fontSize: 18),
+                              style:
+                                  TextStyle(fontSize: 18, color: Colors.white),
                             );
                           })
                     ],
@@ -272,7 +276,7 @@ class _CheckRatesState extends State<CheckRates> {
                       child: Center(
                         child: Icon(
                           Icons.swap_horiz,
-                          color: Colors.white,
+                          color: AppColor.greenColor,
                           size: 55,
                         ),
                       ),

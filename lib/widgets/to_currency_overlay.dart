@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wyrrdemo/utils/app_color.dart';
 
 import '../provider/to_currency_provider.dart';
 
@@ -36,11 +37,12 @@ class _ToCurrencyOverlayState extends State<ToCurrencyOverlay>
     return ScaleTransition(
       scale: scaleAnimation,
       child: AlertDialog(
+          backgroundColor: AppColor.pinkColor,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           title: Text(
-            'To',
-            style: TextStyle(fontSize: 30),
+            'To:',
+            style: TextStyle(fontSize: 30, color: Colors.white),
           ),
           content: Padding(
             padding: const EdgeInsets.all(8),
@@ -76,7 +78,12 @@ class _ToCurrencyOverlayState extends State<ToCurrencyOverlay>
                               color: Colors.white54,
                               shape: BoxShape.circle),
                         ),
-                        Text(tolist.name)
+                        Text(
+                          tolist.name,
+                          style: TextStyle(
+                              color: Colors.white70,
+                              fontWeight: FontWeight.w600),
+                        )
                       ],
                     ),
                   );
