@@ -179,6 +179,10 @@ class _SignupScreenState extends State<SignupScreen> {
                               email: email.trim(), password: password.trim())
                           .then((value) {
                         FirebaseFirestore.instance
+                            .collection('finances')
+                            .doc(value.user!.uid)
+                            .set({});
+                        FirebaseFirestore.instance
                             .collection('users')
                             .doc(value.user!.uid)
                             .set({
