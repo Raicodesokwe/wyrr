@@ -25,6 +25,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   NumberFormat numberFormat = NumberFormat.decimalPattern();
   User? user = FirebaseAuth.instance.currentUser;
   Future<DocumentSnapshot<Map<String, dynamic>>>? _usernameFuture;
+  late Stream<DocumentSnapshot<Map<String, dynamic>>>? _amountStream;
   @override
   void initState() {
     // TODO: implement initState
@@ -38,6 +39,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
     _usernameFuture =
         FirebaseFirestore.instance.collection('users').doc(user!.uid).get();
+
+    _amountStream = FirebaseFirestore.instance
+        .collection('finances')
+        .doc(user!.uid)
+        .snapshots();
   }
 
   @override
@@ -130,13 +136,40 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       'Balance',
                       style: TextStyle(color: Colors.white),
                     ),
-                    Text(
-                      '\$${numberFormat.format(26785)}',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 30,
-                          fontWeight: FontWeight.w600),
-                    ),
+                    StreamBuilder(
+                        stream: _amountStream,
+                        builder: (context, AsyncSnapshot snapshot) {
+                          if (snapshot.hasError) {
+                            return Text(
+                              'Error',
+                              style: TextStyle(color: AppColor.whiteColor),
+                            );
+                          } else if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return Shimmer.fromColors(
+                              baseColor: AppColor.greenColor.withOpacity(0.5),
+                              highlightColor:
+                                  AppColor.greenColor.withOpacity(0.2),
+                              child: Container(
+                                height: 50,
+                                width: size.width * 0.4,
+                                decoration: BoxDecoration(
+                                    color: AppColor.greenColor.withOpacity(0.5),
+                                    borderRadius: BorderRadius.circular(10)),
+                              ),
+                            );
+                          }
+                          final amount = snapshot.data!;
+                          print('amount is ${amount['amount']}');
+
+                          return Text(
+                            '\$${numberFormat.format(amount['amount'])}',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 30,
+                                fontWeight: FontWeight.w600),
+                          );
+                        }),
                     SizedBox(
                       height: 20,
                     ),
@@ -230,57 +263,57 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             SizedBox(
               height: 20,
             ),
-            DefaultTabController(
-                length: 2,
-                child: TabBar(
-                    isScrollable: true,
-                    labelPadding: EdgeInsets.zero,
-                    labelColor: Colors.black,
-                    labelStyle: const TextStyle(
-                        fontSize: 12, fontWeight: FontWeight.w600),
-                    unselectedLabelColor: Colors.white,
-                    controller: tabController,
-                    indicatorColor: AppColor.greenColor.withOpacity(0.28),
-                    tabs: [
-                      Padding(
-                        padding: const EdgeInsets.only(right: 10),
-                        child: Chip(
-                          side: const BorderSide(color: Colors.black, width: 1),
-                          labelPadding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 5),
-                          label: const Text(
-                            'History',
-                            style: TextStyle(color: Colors.black),
-                          ),
-                          backgroundColor: tabController!.index == 0
-                              ? AppColor.greenColor.withOpacity(0.28)
-                              : AppColor.greenColor.withOpacity(0.1),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 10),
-                        child: Chip(
-                          side: const BorderSide(color: Colors.black, width: 1),
-                          labelPadding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 5),
-                          label: const Text(
-                            'Friends',
-                            style: TextStyle(color: Colors.black),
-                          ),
-                          backgroundColor: tabController!.index == 1
-                              ? AppColor.greenColor.withOpacity(0.28)
-                              : AppColor.greenColor.withOpacity(0.1),
-                        ),
-                      ),
-                    ])),
-            SizedBox(
-              height: size.height * 0.48,
-              width: double.infinity,
-              child: TabBarView(controller: tabController, children: [
-                Container(),
-                Container(),
-              ]),
-            )
+            // DefaultTabController(
+            //     length: 2,
+            //     child: TabBar(
+            //         isScrollable: true,
+            //         labelPadding: EdgeInsets.zero,
+            //         labelColor: Colors.black,
+            //         labelStyle: const TextStyle(
+            //             fontSize: 12, fontWeight: FontWeight.w600),
+            //         unselectedLabelColor: Colors.white,
+            //         controller: tabController,
+            //         indicatorColor: AppColor.greenColor.withOpacity(0.28),
+            //         tabs: [
+            //           Padding(
+            //             padding: const EdgeInsets.only(right: 10),
+            //             child: Chip(
+            //               side: const BorderSide(color: Colors.black, width: 1),
+            //               labelPadding: const EdgeInsets.symmetric(
+            //                   horizontal: 10, vertical: 5),
+            //               label: const Text(
+            //                 'History',
+            //                 style: TextStyle(color: Colors.black),
+            //               ),
+            //               backgroundColor: tabController!.index == 0
+            //                   ? AppColor.greenColor.withOpacity(0.28)
+            //                   : AppColor.greenColor.withOpacity(0.1),
+            //             ),
+            //           ),
+            //           Padding(
+            //             padding: const EdgeInsets.only(right: 10),
+            //             child: Chip(
+            //               side: const BorderSide(color: Colors.black, width: 1),
+            //               labelPadding: const EdgeInsets.symmetric(
+            //                   horizontal: 10, vertical: 5),
+            //               label: const Text(
+            //                 'Friends',
+            //                 style: TextStyle(color: Colors.black),
+            //               ),
+            //               backgroundColor: tabController!.index == 1
+            //                   ? AppColor.greenColor.withOpacity(0.28)
+            //                   : AppColor.greenColor.withOpacity(0.1),
+            //             ),
+            //           ),
+            //         ])),
+            // SizedBox(
+            //   height: size.height * 0.48,
+            //   width: double.infinity,
+            //   child: TabBarView(controller: tabController, children: [
+            //     Container(),
+            //     Container(),
+            //   ]),
+            // )
           ],
         ),
       ),

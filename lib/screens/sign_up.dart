@@ -181,7 +181,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         FirebaseFirestore.instance
                             .collection('finances')
                             .doc(value.user!.uid)
-                            .set({});
+                            .set({'amount': 100});
                         FirebaseFirestore.instance
                             .collection('users')
                             .doc(value.user!.uid)
