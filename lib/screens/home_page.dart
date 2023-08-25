@@ -8,6 +8,7 @@ import 'package:intl/intl.dart' show toBeginningOfSentenceCase;
 import 'package:shimmer/shimmer.dart';
 import 'package:wyrrdemo/screens/check_rates.dart';
 import 'package:wyrrdemo/screens/login_page.dart';
+import 'package:wyrrdemo/screens/send_money.dart';
 import 'package:wyrrdemo/services/auth_service.dart';
 import 'package:wyrrdemo/widgets/background_neon.dart';
 
@@ -22,10 +23,13 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   TabController? tabController;
+  int? myAmount;
   NumberFormat numberFormat = NumberFormat.decimalPattern();
   User? user = FirebaseAuth.instance.currentUser;
   Future<DocumentSnapshot<Map<String, dynamic>>>? _usernameFuture;
+  Future<QuerySnapshot<Map<String, dynamic>>>? _friendsFuture;
   late Stream<DocumentSnapshot<Map<String, dynamic>>>? _amountStream;
+  // List<QueryDocumentSnapshot<Map<String, dynamic>>>? friendNamesList;
   @override
   void initState() {
     // TODO: implement initState
@@ -39,6 +43,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
     _usernameFuture =
         FirebaseFirestore.instance.collection('users').doc(user!.uid).get();
+    _friendsFuture = FirebaseFirestore.instance.collection('users').get();
 
     _amountStream = FirebaseFirestore.instance
         .collection('finances')
@@ -161,13 +166,25 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                           }
                           final amount = snapshot.data!;
                           print('amount is ${amount['amount']}');
-
-                          return Text(
-                            '\$${numberFormat.format(amount['amount'])}',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 30,
-                                fontWeight: FontWeight.w600),
+                          myAmount = amount['amount'];
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'CAD\$',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.w600),
+                              ),
+                              Text(
+                                '${numberFormat.format(amount['amount'])}',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 30,
+                                    fontWeight: FontWeight.w600),
+                              ),
+                            ],
                           );
                         }),
                     SizedBox(
@@ -176,37 +193,40 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Container(
-                          height: 50,
-                          width: size.width * 0.3,
-                          child: Center(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Container(
-                                  height: 30,
-                                  width: 30,
-                                  child: Center(
-                                    child: Icon(
-                                      FontAwesomeIcons.moneyBillTransfer,
-                                      size: 15,
-                                      color: Colors.white,
+                        GestureDetector(
+                          onTap: () {},
+                          child: Container(
+                            height: 50,
+                            width: size.width * 0.3,
+                            child: Center(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    height: 30,
+                                    width: 30,
+                                    child: Center(
+                                      child: Icon(
+                                        FontAwesomeIcons.moneyBillTransfer,
+                                        size: 15,
+                                        color: Colors.white,
+                                      ),
                                     ),
+                                    decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: AppColor.pinkColor),
                                   ),
-                                  decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: AppColor.pinkColor),
-                                ),
-                                SizedBox(
-                                  width: 2,
-                                ),
-                                Text('Send'),
-                              ],
+                                  SizedBox(
+                                    width: 2,
+                                  ),
+                                  Text('Send'),
+                                ],
+                              ),
                             ),
+                            decoration: BoxDecoration(
+                                color: AppColor.whiteColor,
+                                borderRadius: BorderRadius.circular(12)),
                           ),
-                          decoration: BoxDecoration(
-                              color: AppColor.whiteColor,
-                              borderRadius: BorderRadius.circular(12)),
                         ),
                         SizedBox(
                           width: 20,
@@ -263,6 +283,96 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             SizedBox(
               height: 20,
             ),
+            FutureBuilder(
+                future: _friendsFuture,
+                builder: (context,
+                    AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
+                        snapshot) {
+                  if (snapshot.hasError) {
+                    return Text(
+                      'Error',
+                      style: TextStyle(color: AppColor.whiteColor),
+                    );
+                  } else if (snapshot.connectionState ==
+                      ConnectionState.waiting) {
+                    return Shimmer.fromColors(
+                      baseColor: AppColor.greenColor.withOpacity(0.5),
+                      highlightColor: AppColor.greenColor.withOpacity(0.2),
+                      child: Container(
+                        height: 50,
+                        width: size.width * 0.4,
+                        decoration: BoxDecoration(
+                            color: AppColor.greenColor.withOpacity(0.5),
+                            borderRadius: BorderRadius.circular(10)),
+                      ),
+                    );
+                  }
+
+                  final friendNamesList = snapshot.data!.docs
+                      .where((element) => element.data()['userId'] != user!.uid)
+                      .toList();
+
+                  print('this is $friendNamesList');
+                  friendNamesList.map((e) {
+                    Map<String, dynamic> data =
+                        e.data() as Map<String, dynamic>;
+                  }).toList();
+
+                  return Row(
+                    children: [
+                      Container(
+                        height: 50,
+                        width: 50,
+                        decoration: BoxDecoration(
+                            color: AppColor.greenColor,
+                            borderRadius: BorderRadius.circular(12)),
+                        child: Icon(Icons.add),
+                      ),
+                      SizedBox(
+                        width: 35,
+                      ),
+                      Wrap(
+                        spacing: 34,
+                        children: List.generate(
+                            friendNamesList.length,
+                            (index) => Column(
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () {
+                                        Navigator.of(context)
+                                            .push(MaterialPageRoute(
+                                                builder: (context) => SendMoney(
+                                                      myAmount: myAmount!,
+                                                      myId: user!.uid,
+                                                      userId:
+                                                          friendNamesList[index]
+                                                              ['userId'],
+                                                      userName:
+                                                          friendNamesList[index]
+                                                              ['username'],
+                                                    )));
+                                      },
+                                      child: Container(
+                                        height: 50,
+                                        width: 50,
+                                        decoration: BoxDecoration(
+                                            color: AppColor.pinkColor,
+                                            borderRadius:
+                                                BorderRadius.circular(12)),
+                                        child: SvgPicture.asset(
+                                            'assets/images/circle.svg'),
+                                      ),
+                                    ),
+                                    Text(
+                                      friendNamesList[index]['username'],
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  ],
+                                )),
+                      ),
+                    ],
+                  );
+                })
             // DefaultTabController(
             //     length: 2,
             //     child: TabBar(

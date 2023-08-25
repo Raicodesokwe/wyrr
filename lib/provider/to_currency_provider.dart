@@ -7,7 +7,7 @@ class ToCurrencyProvider with ChangeNotifier {
     ToCurrenciesModel(image: 'usflag.jpg', name: 'USD'),
     ToCurrenciesModel(image: 'uk.png', name: 'GBP'),
     ToCurrenciesModel(image: 'euro.png', name: 'EUR'),
-    ToCurrenciesModel(image: 'aus.jpg', name: 'AUD'),
+    ToCurrenciesModel(image: 'nigeria.png', name: 'NGN'),
     ToCurrenciesModel(image: 'japan.png', name: 'JPY'),
     ToCurrenciesModel(image: 'sa.jpg', name: 'ZAR'),
   ];

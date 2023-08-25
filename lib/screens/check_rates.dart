@@ -251,8 +251,8 @@ class _CheckRatesState extends State<CheckRates> {
                                               ? '€$changedAmount'
                                               : toCurrency == 'JPY'
                                                   ? '¥$changedAmount'
-                                                  : toCurrency == 'AUD'
-                                                      ? 'AUD\$$changedAmount'
+                                                  : toCurrency == 'NGN'
+                                                      ? 'NGN$changedAmount'
                                                       : changedAmount,
                               style:
                                   TextStyle(fontSize: 18, color: Colors.white),

@@ -187,6 +187,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             .doc(value.user!.uid)
                             .set({
                           'username': name.trim(),
+                          'userId': value.user!.uid
                         }).then((value) {
                           setState(() {
                             isLoading = false;

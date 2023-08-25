@@ -7,7 +7,7 @@ class FromCurrencyProvider with ChangeNotifier {
     FromCurrenciesModel(image: 'usflag.jpg', name: 'USD'),
     FromCurrenciesModel(image: 'uk.png', name: 'GBP'),
     FromCurrenciesModel(image: 'euro.png', name: 'EUR'),
-    FromCurrenciesModel(image: 'aus.jpg', name: 'AUD'),
+    FromCurrenciesModel(image: 'canada.png', name: 'CAD'),
     FromCurrenciesModel(image: 'japan.png', name: 'JPY'),
     FromCurrenciesModel(image: 'sa.jpg', name: 'ZAR'),
   ];

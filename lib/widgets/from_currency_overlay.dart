@@ -48,7 +48,7 @@ class _FromCurrencyOverlayState extends State<FromCurrencyOverlay>
           ),
           content: Padding(
             padding: const EdgeInsets.all(8),
-            child: Consumer<ToCurrencyProvider>(
+            child: Consumer<FromCurrencyProvider>(
               builder: (context, notifier, child) => Wrap(
                 spacing: 25,
                 runSpacing: 15,
