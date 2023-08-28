@@ -22,11 +22,11 @@ class AuthService {
         });
   }
 
-  static signOut(context) async {
+  static Future signOut(context) async {
     try {
       await FirebaseAuth.instance.signOut();
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => LoginScreen()));
+      // Navigator.pushReplacement(
+      //     context, MaterialPageRoute(builder: (context) => LoginScreen()));
     } on FirebaseAuthException catch (e) {
       var message = 'Something went wrong';
       if (e.message != null) {

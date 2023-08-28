@@ -14,12 +14,14 @@ import '../screens/send_money.dart';
 class ConfirmOverlay extends StatefulWidget {
   final String userId;
   final int userAmount;
+  final int amountSent;
   final String myId;
   final int myAmount;
   const ConfirmOverlay({
     Key? key,
     required this.controller,
     required this.widget,
+    required this.amountSent,
     required this.userId,
     required this.userAmount,
     required this.myId,
@@ -129,6 +131,18 @@ class _ConfirmOverlayState extends State<ConfirmOverlay> {
                   setState(() {
                     isLoading = true;
                   });
+                  FirebaseFirestore.instance.collection('transactions').add({
+                    'text': 'sent CAD\$${widget.amountSent}',
+                    'createdAt': Timestamp.now(),
+                    'userId': widget.myId,
+                    'status': 'sent'
+                  });
+                  FirebaseFirestore.instance.collection('transactions').add({
+                    'text': 'received CAD\$${widget.amountSent}',
+                    'createdAt': Timestamp.now(),
+                    'userId': widget.userId,
+                    'status': 'received'
+                  });
                   FirebaseFirestore.instance
                       .collection('finances')
                       .doc(widget.userId)
@@ -142,6 +156,7 @@ class _ConfirmOverlayState extends State<ConfirmOverlay> {
                     });
                     showDialog(
                         context: context,
+                        barrierDismissible: false,
                         builder: (ctx) {
                           return SuccessOverlay();
                         });
@@ -153,7 +168,7 @@ class _ConfirmOverlayState extends State<ConfirmOverlay> {
                   child: Center(
                     child: isLoading
                         ? CircularProgressIndicator(
-                            color: Colors.white,
+                            color: AppColor.pinkColor,
                           )
                         : Text(
                             'Yes',

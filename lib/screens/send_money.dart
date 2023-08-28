@@ -9,6 +9,7 @@ import 'package:shimmer/shimmer.dart';
 import 'package:wyrrdemo/api/api_provider.dart';
 import 'package:wyrrdemo/utils/app_color.dart';
 import 'package:wyrrdemo/widgets/background_neon.dart';
+import 'package:wyrrdemo/widgets/warning_modal.dart';
 
 import '../data/currency_converter_bloc.dart';
 import '../models/currency_change_model.dart';
@@ -306,24 +307,34 @@ class _SendMoneyState extends State<SendMoney> {
                       ),
                       GestureDetector(
                           onTap: () {
+                            final myReducedAmount =
+                                widget.myAmount - int.parse(controller.text);
+                            final userIncreasedAmount =
+                                userAmount! + int.parse(controller.text);
                             showModalBottomSheet(
                                 context: context,
-                                backgroundColor: AppColor.pinkColor,
+                                backgroundColor: myReducedAmount < 0
+                                    ? AppColor.greenColor
+                                    : AppColor.pinkColor,
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.only(
                                         topLeft: Radius.circular(12),
                                         topRight: Radius.circular(12))),
                                 builder: (ctx) {
-                                  return ConfirmOverlay(
-                                      myAmount: widget.myAmount -
-                                          int.parse(controller.text),
-                                      userAmount: userAmount! +
-                                          int.parse(controller.text),
-                                      userId: widget.userId,
-                                      myId: widget.myId,
-                                      controller: controller,
-                                      widget: widget);
-                                });
+                                  return myReducedAmount < 0
+                                      ? WarningModal()
+                                      : ConfirmOverlay(
+                                          amountSent:
+                                              int.parse(controller.text),
+                                          myAmount: myReducedAmount,
+                                          userAmount: userIncreasedAmount,
+                                          userId: widget.userId,
+                                          myId: widget.myId,
+                                          controller: controller,
+                                          widget: widget);
+                                }).then((value) {
+                              controller.clear();
+                            });
                           },
                           child: Container(
                             height: 70,

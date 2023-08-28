@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:provider/provider.dart';
 import 'package:wyrrdemo/provider/from_currency_provider.dart';
 import 'package:wyrrdemo/provider/to_currency_provider.dart';
@@ -10,13 +11,19 @@ import 'package:wyrrdemo/services/auth_service.dart';
 import 'package:wyrrdemo/utils/app_color.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  // FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  // FlutterNativeSplash.remove();
   await Firebase.initializeApp();
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
   runApp(const MyApp());
+}
+
+Future initiaLization(BuildContext? context) async {
+  await Future.delayed(Duration(seconds: 3));
 }
 
 class MyApp extends StatelessWidget {

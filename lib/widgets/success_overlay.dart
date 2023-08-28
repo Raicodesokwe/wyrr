@@ -9,7 +9,7 @@ class SuccessOverlay extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return AlertDialog(
-      backgroundColor: AppColor.blackColor,
+      backgroundColor: Colors.white24,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       title: Text(
         'Successfully sent the funds!!',
@@ -20,6 +20,7 @@ class SuccessOverlay extends StatelessWidget {
         Lottie.asset('assets/images/success.json'),
         GestureDetector(
           onTap: () {
+            Navigator.of(context).pop();
             Navigator.of(context).pop();
           },
           child: Container(
