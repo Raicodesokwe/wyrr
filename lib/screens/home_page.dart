@@ -479,6 +479,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                     }).toList();
 
                     return Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
                           height: 50,
@@ -489,53 +490,65 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                           child: Icon(Icons.add),
                         ),
                         SizedBox(
-                          width: 35,
+                          width: 25,
                         ),
-                        Wrap(
-                          spacing: 34,
-                          children: List.generate(
-                              friendNamesList.length,
-                              (index) => Column(
-                                    children: [
-                                      GestureDetector(
-                                        onTap: () {
-                                          Navigator.of(context).push(
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      SendMoney(
-                                                        myAmount: myAmount!,
-                                                        myId: user!.uid,
-                                                        userId: friendNamesList[
-                                                            index]['userId'],
-                                                        userName:
-                                                            friendNamesList[
-                                                                    index]
-                                                                ['username'],
-                                                      )));
-                                        },
-                                        child: Container(
-                                          height: 50,
-                                          width: 50,
-                                          decoration: BoxDecoration(
-                                              color: AppColor.pinkColor,
-                                              borderRadius:
-                                                  BorderRadius.circular(12)),
-                                          child: ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
-                                            child: SvgPicture.asset(
-                                              'assets/images/circle.svg',
-                                              fit: BoxFit.cover,
+                        SizedBox(
+                          height: 80,
+                          width: size.width * 0.65,
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Wrap(
+                              clipBehavior: Clip.none,
+                              spacing: 34,
+                              children: List.generate(
+                                  friendNamesList.length,
+                                  (index) => Column(
+                                        children: [
+                                          GestureDetector(
+                                            onTap: () {
+                                              Navigator.of(context).push(
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          SendMoney(
+                                                            myAmount: myAmount!,
+                                                            myId: user!.uid,
+                                                            userId:
+                                                                friendNamesList[
+                                                                        index]
+                                                                    ['userId'],
+                                                            userName:
+                                                                friendNamesList[
+                                                                        index][
+                                                                    'username'],
+                                                          )));
+                                            },
+                                            child: Container(
+                                              height: 50,
+                                              width: 50,
+                                              decoration: BoxDecoration(
+                                                  color: AppColor.pinkColor,
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          12)),
+                                              child: ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(12),
+                                                child: SvgPicture.asset(
+                                                  'assets/images/circle.svg',
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                      ),
-                                      Text(
-                                        friendNamesList[index]['username'],
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                    ],
-                                  )),
+                                          Text(
+                                            friendNamesList[index]['username'],
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          ),
+                                        ],
+                                      )),
+                            ),
+                          ),
                         ),
                       ],
                     );
